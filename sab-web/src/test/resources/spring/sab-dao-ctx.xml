@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+							http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+    <!-- Setup spring to pull in @Controller, @RequestMapping, etc Configuration 
+    scans specified packages for classes configured as Spring managed beans and 
+    automatically sets up objects annotated with @Controller, @Service etc. -->
+    <context:component-scan base-package="com.gamasoft.hps.sab.repository" />
+
+    <bean id="sqlDatasource"
+        class="com.gamasoft.hps.sab.datasource.sql.SQLDatasource">
+        <constructor-arg index="0" value="liveTurnerDatasource"/>
+        <constructor-arg index="1" ref="liveDataSourceTurner"/>
+    </bean>
+
+    <bean id="filterRepository"
+        class="com.gamasoft.hps.sab.repository.SimpleFilterRepository">
+        <property name="dao" ref="filterDao" />
+    </bean>
+
+    <bean id="userRepository"
+          class="com.gamasoft.hps.sab.repository.SimpleUserRepository">
+        <property name="dao" ref="userDao" />
+    </bean>
+
+    <bean id="roleRepository"
+          class="com.gamasoft.hps.sab.repository.SimpleRoleRepository">
+        <property name="dao" ref="roleDao" />
+    </bean>
+
+    <bean id="dashboardRepository"
+          class="com.gamasoft.hps.sab.repository.SimpleDashboardRepository">
+        <property name="dao" ref="dashboardDao" />
+    </bean>
+
+    <bean id="widgetRepository"
+          class="com.gamasoft.hps.sab.repository.SimpleWidgetRepository">
+        <property name="dao" ref="widgetDao" />
+    </bean>
+	
+    <bean id="reportRepository"
+           class="com.gamasoft.hps.sab.report.sql.SQLReportRepository">
+        <property name="dao" ref="reportDao" />
+    </bean>
+
+    <bean id="reportFieldRepository"
+        class="com.gamasoft.hps.sab.report.sql.SQLFieldRepository">
+        <property name="dao" ref="reportFieldDao" />
+    </bean>
+  
+    <bean id="reportParameterRepository"
+        class="com.gamasoft.hps.sab.report.sql.SQLParameterRepository">
+        <property name="dao" ref="reportParameterDao" />
+    </bean>
+
+    <bean id="filterDao"
+        class="com.gamasoft.hps.sab.repository.hibernate.HibernateGenericDao">
+        <constructor-arg index="0" ref="sessionFactory"/>
+        <constructor-arg index="1" value="com.gamasoft.hps.sab.domain.Filter"/>
+    </bean>
+  
+    <bean id="userDao"
+          class="com.gamasoft.hps.sab.repository.hibernate.HibernateGenericDao">
+        <constructor-arg index="0" ref="sessionFactory"/>
+        <constructor-arg index="1" value="com.gamasoft.hps.sab.domain.User"/>
+    </bean>
+	
+    <bean id="roleDao"
+          class="com.gamasoft.hps.sab.repository.hibernate.HibernateGenericDao">
+        <constructor-arg index="0" ref="sessionFactory"/>
+        <constructor-arg index="1" value="com.gamasoft.hps.sab.domain.Role"/>
+    </bean>
+	
+    <bean id="dashboardDao"
+          class="com.gamasoft.hps.sab.repository.hibernate.HibernateGenericDao">
+        <constructor-arg index="0" ref="sessionFactory"/>
+        <constructor-arg index="1" value="com.gamasoft.hps.sab.domain.Dashboard"/>
+    </bean>
+	
+    <bean id="widgetDao"
+          class="com.globant.hps.acuitas.repository.hibernate.HibernateGenericDao">
+        <constructor-arg index="0" ref="sessionFactory"/>
+        <constructor-arg index="1" value="com.globant.hps.acuitas.domain.Widget"/>
+    </bean>
+	
+    <bean id="reportDao"
+          class="com.gamasoft.hps.sab.repository.hibernate.HibernateGenericDao">
+        <constructor-arg index="0" ref="sessionFactory"/>
+        <constructor-arg index="1" value="com.gamasoft.hps.sab.report.sql.SQLReport"/>
+    </bean>
+	
+    <bean id="reportFieldDao"
+          class="com.gamasoft.hps.sab.repository.hibernate.HibernateGenericDao">
+        <constructor-arg index="0" ref="sessionFactory"/>
+        <constructor-arg index="1" value="com.gamasoft.hps.sab.report.sql.SQLField"/>
+    </bean>
+	
+    <bean id="reportParameterDao"
+          class="com.gamasoft.hps.sab.repository.hibernate.HibernateGenericDao">
+        <constructor-arg index="0" ref="sessionFactory"/>
+        <constructor-arg index="1" value="com.gamasoft.hps.sab.report.sql.SQLParameter"/>
+    </bean>
+
+</beans>
+
+

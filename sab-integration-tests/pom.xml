@@ -1,0 +1,207 @@
+<?xml version="1.0"?>
+<project
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.gamasoft.base</groupId>
+    <artifactId>sab</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+    
+
+  <groupId>com.gamasoft.base</groupId>
+  <artifactId>sab-integration-tests</artifactId>
+  <packaging>jar</packaging>
+  <version>${sab-integration-version}</version>
+  <name>Sab - integration tests</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.jayway.restassured</groupId>
+      <artifactId>rest-assured</artifactId>
+      <version>1.2.3</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.10</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+  
+    <plugins>    
+      <!-- step 01 - copies the war file into target directory -->
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.4</version>
+        <executions>
+          <execution>
+            <phase>pre-integration-test</phase>
+            <configuration>
+              <tasks>
+                <copy todir="${basedir}/target/">
+                  <fileset dir="${basedir}/../sab-web/target/"
+                    includes="**/*.war" />
+                  <fileset dir="${basedir}/../../sample_data/"
+                    includes="**/gamasoft_sab.sql" />  
+                </copy>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+     <!-- step 02 - load project properties an set as mvn parameters -->
+     <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>properties-maven-plugin</artifactId>
+        <version>1.0-alpha-2</version>
+        <executions>
+          <execution>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>read-project-properties</goal>
+            </goals>
+            <configuration>
+              <files>
+                <file>${basedir}/src/test/resources/sab.properties</file>
+              </files>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+     
+      <!-- step 03 - updates DB name as sab-integration -->
+      <plugin>
+        <groupId>com.google.code.maven-replacer-plugin</groupId>
+        <artifactId>maven-replacer-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>replace</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <includes>
+            <include>target/gamasoft_sab.sql</include>
+          </includes>
+          <replacements>
+            <replacement>
+              <token>`sab`</token>
+              <value>`${db.name}`</value>
+            </replacement>
+          </replacements>
+        </configuration>
+      </plugin>
+
+      <!-- step 04 - creates and populates the Mysql schema -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>sql-maven-plugin</artifactId>
+        <version>1.5</version>
+        
+        <dependencies>
+          <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.java.version}</version>
+          </dependency>
+        </dependencies>
+        
+        <configuration>  
+           <driver>${jdbc.driverClassName}</driver>
+           <url>${jdbc.url}</url>  
+           <username>${jdbc.username}</username>  
+           <password>${jdbc.password}</password>  
+         </configuration> 
+         <executions>
+          <execution>
+            <id>create-integration-test-data</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>execute</goal>
+            </goals>
+            <configuration>
+               <autocommit>true</autocommit>  
+               <srcFiles>
+                 <srcFile>target/gamasoft_sab.sql</srcFile>
+               </srcFiles>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    
+      <!-- step 05 - runs a jetty server and deploys the sab-war there -->
+      <plugin>
+        <groupId>org.mortbay.jetty</groupId>
+        <artifactId>jetty-maven-plugin</artifactId>
+        <version>8.0.0.M2</version>
+        <configuration>
+          <stopKey>STOP</stopKey>
+          <scanIntervalSeconds>10</scanIntervalSeconds>
+          <stopPort>8092</stopPort>
+          <daemon>true</daemon>
+          <reload>manual</reload>
+          <connectors>
+            <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
+              <port>8090</port>
+              <maxIdleTime>60000</maxIdleTime>
+            </connector>
+          </connectors>
+
+         <contextHandlers>
+            <contextHandler implementation="org.eclipse.jetty.webapp.WebAppContext">
+              <war>${basedir}/target/sab-web-${sab-web-version}.war</war>
+              <contextPath>/sab-web</contextPath>              
+              <resourceBase>${basedir}/src/test/resources</resourceBase>
+            </contextHandler>
+          </contextHandlers>
+    
+        </configuration>
+        <executions>
+          <execution>
+            <id>start-jetty</id>
+            <phase>pre-integration-test</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <scanIntervalSeconds>0</scanIntervalSeconds>
+              <daemon>true</daemon>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+     <!-- step 06 - activates the IT files -->
+     <plugin>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>2.6</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <useFile>false</useFile>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
+
+</project>

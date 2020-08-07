@@ -1,0 +1,120 @@
+.brand /* Overwrites bootstrap */
+{
+  background: url(../images/turner/logo.jpg) no-repeat center;
+  height: 20px;
+  width: 128px;
+}
+
+
+.navbar-fixed-top .navbar-inner, .navbar-static-top .navbar-inner {
+	background: #373433;
+}
+
+.well {
+	background: #373433;
+	border: none;
+}
+
+form .page-header {
+	color: #ffffff;
+	font-size: 22px;
+	border-bottom: 1px solid #E65853;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #E65853;
+}
+
+
+.form-field label {
+	color: #ffffff;
+}
+
+
+.row-fluid .span10{
+	width:90%;
+}
+
+div .form-footer {
+	width:90%;
+}
+
+.navbar .nav > .active > a, .navbar .nav > .active > a:hover, .navbar .nav > .active > a:focus {
+	background: #666666;
+	color:#ffffff;
+}
+
+.navbar .nav > li > a {
+	text-shadow:none;
+	color:#ffffff;	
+}
+
+
+.navbar .nav>li>a:focus,.navbar .nav>li>a:hover {
+	color: #666666;
+	text-decoration: none;
+	background-color: transparent;
+}
+
+
+.nav-tabs>.active>a,.nav-tabs>.active>a:hover {
+	color: #555555;
+	cursor: default;
+	background-color: #ffffff;
+	border: 1px solid #E65853;
+	border-bottom-color: transparent;
+}
+
+.nav-tabs {
+	border-bottom: 1px solid #E65853;
+}
+
+.table th, .table td{
+	border-color: #E65853;
+}
+
+#WidgetsRepository .modal-header, .modal-header {
+	border: 1px solid #E65853;
+	background: #666666;
+	color: #ffffff;
+	-webkit-border-radius: 6px;
+	-webkit-border-bottom-left-radius: 0px;
+	-webkit-border-bottom-right-radius: 0px;
+	-moz-border-radius: 6px;
+	-moz-border-bottom-left-radius: 0px;
+	-moz-border-bottom-right-radius: 0px;
+	border-radius: 6px;
+	border-bottom-left-radius: 0px;
+	border-bottom-right-radius: 0px;
+}
+
+.required{
+	color:#E65853;
+}
+
+.nav-tabs > li > a {
+	color:#373433;
+}
+
+
+article, aside, details, figcaption, figure, footer, header, hgroup, nav, section {
+	border-bottom: 1px solid #E65853;
+}
+
+
+.dashboard-widget-header {
+	background: #666666;
+	color: #ffffff;
+}
+
+.dashboard-widget-header h1 {
+	font-size: 17px;
+}
+
+.dashboard-widget-header h2 {
+	font-size: 12px;
+}
+
+
+.dashboard-filters-container p {
+	margin: 10px;
+}

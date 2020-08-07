@@ -1,0 +1,128 @@
+body {
+  padding-top: 60px;
+}
+
+@media (max-width: 979px) {
+  body {
+    padding-top: 0px;
+  }
+}
+
+.brand /* Overwrites bootstrap */
+{
+  background: url(../images/Logo_Gamasoft.png) no-repeat center;
+  height: 37px;
+  width: 141px;
+}
+
+.dashboard-container {
+    border-radius: 2px;
+    background-color: rgba(128, 128, 128, 0.15);
+}
+
+.dashboard-filters-container {
+  background: #F4A460; /*#CD5C5C; /* #F5F5DC; /* Beige */
+  /* background: #BC8F8F; /* RosyBrown */
+  border: 1px�solid grey;	
+}
+
+.dashboard-filters-container p{
+  float:left;	
+}
+
+.DashboardOptions{
+    height: 25px;
+    background-color: #eeeeee; 
+    padding-top: 6px;
+    padding-bottom: 12px;
+}
+
+.DashboardOptions div > span {
+    color: black;
+    float: left;
+    font-family: Trebuchet MS; 
+    font-size: 16px; 
+    height: auto;
+    padding: 4px 10px;
+    vertical-align: middle;
+}
+
+.DashboardOptions div{
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+.DashboardOptions div > div{
+    float: right;
+}
+
+.DashboardOptions div > input{
+    float: right;
+}
+
+.DashboardOptions input{
+    margin-left: 3px;
+}
+
+.DashboardContainer{
+    border-top: solid 1px #cccccc;
+    height: 1000px;
+    background-color: #f6f7f6;
+    position: relative;
+}
+#WidgetsRepository {
+    margin-left: 20%;
+    margin-right: 20%;
+    width: auto;
+    left: auto;
+}
+
+#WidgetsRepository .modal-header {
+    background-color: #f6f7f6;
+}
+
+#WidgetsListContainer {
+    height: 300px;
+    overflow-y: auto;
+    width: auto;
+}
+
+.widget-repository-item{
+    font-weight: bold;
+    padding: 2px;
+    cursor: pointer;
+}
+
+.widget-repository-item i{
+    vertical-align: bottom;
+}
+
+.widget-repository-item:hover {
+    background-color: #F3F2F3;
+}
+
+[class^="chart-icon-"],
+[class*=" chart-icon-"] {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  margin-top: 1px;
+  *margin-right: .3em;
+  line-height: 24px;
+  vertical-align: text-top;
+  background-image: url("../images/charts.png");
+  background-position: 24px 24px;
+  background-repeat: no-repeat;
+}
+
+.chart-icon-pie {
+  background-position: 0 0;
+}
+
+.chart-icon-line {
+  background-position: 0 -72px;
+}
+
+.chart-icon-bar {
+  background-position: 0 -48px;
+}

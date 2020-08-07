@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+						http://www.springframework.org/schema/context 
+                        http://www.springframework.org/schema/context/spring-context-3.1.xsd
+						http://www.springframework.org/schema/jdbc 
+                        http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+                        http://www.springframework.org/schema/data/mongo
+                        http://www.springframework.org/schema/data/mongo/spring-mongo-1.1.xsd">
+
+
+    <mongo:mongo host="localhost" port="27017" />
+	<mongo:db-factory dbname="test" />
+    
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="org.hsqldb.jdbcDriver" />
+		<property name="jdbcUrl" value="jdbc:hsqldb:mem:sab" />
+		<property name="user" value="sa" />
+		<property name="password" value="" />
+	</bean>
+
+	<!-- for direct access in Testing scenarios -->
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<constructor-arg ref="dataSource" />
+	</bean>
+
+
+	<!-- Turner datasource -->
+
+	<bean id="dataSourceTurner" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="org.hsqldb.jdbcDriver" />
+		<property name="jdbcUrl" value="jdbc:hsqldb:mem:db_turner" />
+		<property name="user" value="sa" />
+		<property name="password" value="" />
+	</bean>
+
+  <bean id="liveDataSourceTurner" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+        destroy-method="close">
+      <property name="driverClass" value="${jdbc.turner.driverClassName}"/>
+      <property name="jdbcUrl" value="${jdbc.turner.url}${db.turner.name}"/>
+      <property name="user" value="${jdbc.turner.username}"/>
+      <property name="password" value="${jdbc.turner.password}"/>
+      <property name="minPoolSize" value='5'/>
+      <property name="maxPoolSize" value='30'/>
+
+      <!-- The number of milliseconds a client calling getConnection() will wait
+      for a Connection to be checked-in or acquired when the pool is
+      exhausted. Zero means wait indefinitely. Setting any positive value
+      will cause the getConnection() call to time-out and break with an
+      SQLException after the specified number of milliseconds. -->
+      <property name="checkoutTimeout" value='10000'/>
+
+      <!-- Determines how many connections at a time c3p0 will try to acquire
+      when the pool is exhausted -->
+      <property name="acquireIncrement" value='3'/>
+
+      <!-- The number of seconds between each test of all idle, pooled but
+      unchecked-out connections. Set to 1 minute here. A broken connection
+      will not be kept in the pool for longer than a minute. -->
+      <property name="idleConnectionTestPeriod" value='60'/>
+
+      <!-- Defines the query that will be executed for all connection tests. The
+      following value only works in mysql.
+      For oracle use 'select 1 from dual'. -->
+      <property name="preferredTestQuery" value='select 1 from dual;'/>
+
+      <!-- Specify the maximum number of seconds to keep an idle connection
+      (in this case, 7 hours). For mysql, it should be lower that the
+      wait_timeout mysqld option. wait_timeout is 8 hours by default. -->
+      <property name="maxIdleTime" value='25200'/>
+
+      <!-- Maximum Number of prepared statements that will be cached. Disabled
+      here. -->
+      <property name="maxStatements" value='0'/>
+
+      <!-- Convenient but expensive. -->
+      <!-- property name="testConnectionOnCheckout" value='true'/-->
+
+      <!-- For debugging purposes only. Very expensive. -->
+      <!--property name='debugUnreturnedConnectionStackTraces' value='true'/ -->
+
+  </bean>
+
+	<!-- here we could run some db script as precondition for testing environment -->
+	<!-- <jdbc:initialize-database data-source="dataSource"> <jdbc:script location="scripts/pre-saved-data-acuitas.sql" 
+		/> </jdbc:initialize-database> -->
+</beans>
+
+

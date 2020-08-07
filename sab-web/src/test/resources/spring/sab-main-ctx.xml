@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <import resource="acuitas-service-ctx.xml" />
+	<import resource="acuitas-dao-ctx.xml" />
+	<import resource="acuitas-db-ctx.xml" />
+	
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory">
+			<ref local="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<!-- org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean -->
+
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+
+
+		<property name="annotatedClasses">
+			<list>
+				<value>com.globant.hps.acuitas.domain.User</value>
+				<value>com.globant.hps.acuitas.domain.Role</value>
+				<value>com.globant.hps.acuitas.domain.Dashboard</value>
+                                <value>com.globant.hps.acuitas.domain.Widget</value>
+                                <value>com.globant.hps.acuitas.domain.WidgetFilter</value>
+                                <value>com.globant.hps.acuitas.domain.WidgetField</value>
+			</list>
+		</property>
+
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.connection.autocommit">true</prop>
+			</props>
+		</property>
+
+	</bean>
+
+    <!--<bean id="eaDataSource" class="com.globant.hps.acuitas.report.datasource.hibernate.HibernateDatasource">
+        <property name="dataSource" ref="dataSourceEa" />
+    </bean>-->
+
+    <!-- MONGODB DATASOURCE-->
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
+	</bean>
+    
+    <bean id="mongoDataSource" class="com.globant.hps.acuitas.report.datasource.mongodb.MongodbDatasource">
+        <property name="mongoTemplate" ref="mongoTemplate" />
+    </bean>
+    
+    <!-- MONGODB REPORTS-->
+    <bean id="courseTreeMongodbReport" class="com.globant.hps.acuitas.report.datasource.mongodb.reports.MongodbCourseStructure"/> 
+    <bean id="courseTreeMongodbReport" class="com.globant.hps.acuitas.report.datasource.mongodb.reports.MongodbCourseStructure"/>
+    <bean id="modulesMongodbReport" class="com.globant.hps.acuitas.report.datasource.mongodb.reports.MongodbModules"/>
+</beans>
